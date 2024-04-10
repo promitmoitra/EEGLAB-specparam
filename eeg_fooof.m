@@ -62,7 +62,11 @@ function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, set
         end
 
     else % channel case
-        [eegspecdB, specfreqs] = pop_spectopo(EEG, 1, epoch_range, 'EEG' , 'percent', percent, 'freq', [10], 'freqrange',f_range,'electrodes','off', 'plot', 'off');
+        if EEG.trials>1
+            [eegspecdB, specfreqs] = pop_spectopo(EEG, 1, epoch_range, 'ERP' , 'percent', percent, 'freq', [10], 'freqrange',f_range,'electrodes','off', 'plot', 'off');
+        else
+            [eegspecdB, specfreqs] = pop_spectopo(EEG, 1, epoch_range, 'EEG' , 'percent', percent, 'freq', [10], 'freqrange',f_range,'electrodes','off', 'plot', 'off');
+        end
         eegspecdB = eegspecdB(ids,:);
         specdata = arrayfun(@(y) 10^(y/10), eegspecdB'); % reshaping + undoing the 10*log10(power) transformation
         specfreqs = specfreqs';  % reshaping frequencies
