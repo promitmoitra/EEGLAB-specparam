@@ -1,4 +1,4 @@
-function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, settings)
+function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, setting)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB
     
@@ -40,8 +40,8 @@ function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, set
         percent = 100;
     end
 
-    if ~exist('settings', 'var')
-        settings = struct();
+    if ~exist('setting', 'var')
+        setting = struct();
     end
     
     % compute spectrum and fit
@@ -55,7 +55,7 @@ function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, set
         fooof_results = cell([size(EEG.icaweights,1), 1]); % indexed by component
         
         % computing FOOOF
-        fooof_results_temp = fooof_group(specfreqs, specdata, f_range, settings, true); 
+        fooof_results_temp = fooof_group(specfreqs, specdata, f_range, setting, true); 
         for i = 1:numel(ids)
             comp_i = ids(i);
             fooof_results{comp_i} = fooof_results_temp(i);
@@ -72,9 +72,10 @@ function EEG = eeg_fooof(EEG, datatype, ids, epoch_range, percent,  f_range, set
         specdata = arrayfun(@(y) 10^(y/10), eegspecdB'); % reshaping + undoing the 10*log10(power) transformation
         specfreqs = specfreqs';  % reshaping frequencies
         fooof_results = cell([size(EEG.chanlocs,2), 1]);
-        
+%         sprintf('eeg_fooof: specdata %d,',size(specdata))
+%         sprintf('eeg_fooof: specfreqs %d,',size(specfreqs))
         % computing FOOOF
-        fooof_results_temp = fooof_group(specfreqs, specdata, f_range, settings, true); 
+        fooof_results_temp = fooof_group(specfreqs, specdata, f_range, setting, true); 
         for i = 1:numel(ids)
             comp_i = ids(i);
             fooof_results{comp_i} = fooof_results_temp(i);

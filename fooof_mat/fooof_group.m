@@ -1,19 +1,19 @@
 % fooof_group() - Run the fooof model on a group of neural power spectra.
 %
 % Usage:
-%   fooof_results = fooof_group(freqs, psds, f_range, settings);
+%   fooof_results = fooof_group(freqs, psds, f_range, setting);
 %
 % Inputs:
 %   freqs           = row vector of frequency values
 %   psds            = matrix of power values, which each row representing a spectrum
 %   f_range         = fitting range (Hz)
-%   settings        = fooof model settings, in a struct, including:
-%       settings.peak_width_limts
-%       settings.max_n_peaks
-%       settings.min_peak_height
-%       settings.peak_threshold
-%       settings.aperiodic_mode
-%       settings.verbose
+%   setting        = fooof model setting, in a struct, including:
+%       setting.peak_width_limts
+%       setting.max_n_peaks
+%       setting.min_peak_height
+%       setting.peak_threshold
+%       setting.aperiodic_mode
+%       setting.verbose
 %
 % Outputs:
 %   fooof_results   = fooof model ouputs, in a struct, including:
@@ -24,24 +24,26 @@
 %       fooof_results.r_squared
 %
 % Notes
-%   Not all settings need to be set. Any settings that are not
+%   Not all setting need to be set. Any setting that are not
 %     provided as set to default values. To run with all defaults,
-%     input settings as an empty struct.
+%     input setting as an empty struct.
 
-function fooof_results = fooof_group(freqs, psds, f_range, settings, return_model)
+function fooof_results = fooof_group(freqs, psds, f_range, setting, return_model)
     if ~exist('return_model', 'var')
         return_model = false; 
     end
 
-    % Check settings - get defaults for those not provided
-    settings = fooof_check_settings(settings);
+    % Check setting - get defaults for those not provided
+    setting = fooof_check_settings(setting);
 
     % Initialize object to collect FOOOF results
     fooof_results = [];
 
     % Run FOOOF across the group of power spectra
     for psd = psds
-        cur_results = fooof(freqs, psd', f_range, settings, return_model);
+%         sprintf('fooof_group: freqs %d,',size(freqs))
+%         sprintf('fooof_group: psd` %d,',size(psd'))
+        cur_results = fooof(freqs, psd', f_range, setting, return_model);
         fooof_results = [fooof_results, cur_results];
     end
 
