@@ -41,8 +41,6 @@ function fooof_results = fooof_group(freqs, psds, f_range, setting, return_model
 
     % Run FOOOF across the group of power spectra
     for psd = psds
-%         sprintf('fooof_group: freqs %d,',size(freqs))
-%         sprintf('fooof_group: psd` %d,',size(psd'))
         cur_results = fooof(freqs, psd', f_range, setting, return_model);
         fooof_results = [fooof_results, cur_results];
     end
